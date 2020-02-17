@@ -1,0 +1,7 @@
+<#assign dkhHead="${">
+<#assign dkhEnd="}">
+<#assign jkhHead ="<#">
+<#assign jkhEnd =">">
+<#assign listHead = "<#list">
+<#assign listEnd = "</#list>">
+<#assign dateTag="?date">

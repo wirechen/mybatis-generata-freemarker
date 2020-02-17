@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jjshome.jjstool.dao.IGenerateCodeDAO">
+	
+	<resultMap id="TableEntity" type="com.jjshome.jjstool.entity.TableEntity">
+		<result column="TABLE_SCHEMA" property="tableSchema" jdbcType="VARCHAR" />
+		<result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR" />
+		<result column="TABLE_COMMENT" property="tableComment" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="ColumnEntity" type="com.jjshome.jjstool.entity.ColumnEntity">
+		<result column="TABLE_NAME" property="tableName" jdbcType="VARCHAR" />
+		<result column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
+		<result column="DATA_TYPE" property="dataType" jdbcType="VARCHAR" />
+		<result column="COLUMN_COMMENT" property="columnComment" jdbcType="VARCHAR" />
+		<result column="CHARACTER_MAXIMUM_LENGTH" property="characterMaximumLength" jdbcType="INTEGER" /> 
+		<result column="NUMERIC_PRECISION" property="numericPrecision" jdbcType="INTEGER" /> 
+		<result column="NUMERIC_SCALE" property="numericScale" jdbcType="INTEGER" /> 
+		<result column="IS_NULLABLE" property="isNullable" jdbcType="VARCHAR" /> 
+		<result column="AUTO_INCREMENT" property="isAutoIncrement" jdbcType="INTEGER" /> 
+		<result column="COLUMN_DEFAULT" property="columnDefault" jdbcType="VARCHAR" /> 
+		<result column="ORDINAL_POSITION" property="ordinalPosition" jdbcType="INTEGER" /> 
+		<result column="COLUMN_KEY" property="columnKey" jdbcType="VARCHAR" /> 
+	</resultMap>
+
+	<sql id="Column_Column_List">
+		TABLE_NAME, 
+		COLUMN_NAME,
+		DATA_TYPE, 
+		COLUMN_COMMENT,
+		CHARACTER_MAXIMUM_LENGTH,
+		NUMERIC_PRECISION,
+		NUMERIC_SCALE,
+		IS_NULLABLE,
+		CASE
+	        WHEN extra = 'auto_increment'
+	        THEN 1
+	        ELSE 0
+        END AS AUTO_INCREMENT,
+		COLUMN_DEFAULT,
+		ORDINAL_POSITION,
+		COLUMN_KEY
+	</sql>
+	
+	<sql id="Table_Column_List">
+		TABLE_SCHEMA, 
+		TABLE_NAME,
+		TABLE_COMMENT
+	</sql>
+    
+    <select id="selectTableListBySchema" resultMap="TableEntity">
+		SELECT
+		  	<include refid="Table_Column_List" />
+		FROM 
+			TABLES
+	   	WHERE 
+	   		TABLE_SCHEMA=#{tableSchema,jdbcType=VARCHAR}
+	 	ORDER BY 
+	 		create_time DESC
+	</select>
+	
+	<select id="selectTableByName" resultMap="TableEntity">
+		SELECT
+		<include refid="Table_Column_List" />
+		FROM
+			TABLES
+		WHERE
+			1=1
+			<if test="tableName != null">
+				AND TABLE_NAME=#{tableName,jdbcType=VARCHAR}
+			</if>
+			<if test="tableSchema != null">
+				AND TABLE_SCHEMA=#{tableSchema,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<select id="selectColumnByTable" resultMap="ColumnEntity">
+		SELECT
+		<include refid="Column_Column_List" />
+		FROM
+			COLUMNS
+		WHERE
+		 	1=1
+			<if test="tableName != null">
+				AND TABLE_NAME=#{tableName,jdbcType=VARCHAR}
+			</if>
+			<if test="tableSchema != null">
+				AND TABLE_SCHEMA=#{tableSchema,jdbcType=VARCHAR}
+			</if>
+	</select>
+
+</mapper>
