@@ -15,7 +15,7 @@
 		<plugin.resources.version>2.6</plugin.resources.version>
 		<plugin.source.version>2.2.1</plugin.source.version>
 
-		<spring.version>4.1.8.RELEASE</spring.version>
+		<spring.version>5.2.3.RELEASE</spring.version>
 		<mybatis.version>3.3.0</mybatis.version>
 		<mybatis-spring.version>1.2.3</mybatis-spring.version>
 		<activiti.version>5.13</activiti.version>
